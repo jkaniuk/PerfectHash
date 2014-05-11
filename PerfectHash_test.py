@@ -27,8 +27,8 @@ class DataSource(object):
         return data
 
 
-class HashTest(unittest.TestCase):
-    count = 1000
+class BigTest(unittest.TestCase):
+    count = 10000
     data = DataSource.get_random(count)
     phash = PerfectHash(data)
 
@@ -39,6 +39,28 @@ class HashTest(unittest.TestCase):
     def test_len(self):
         self.assertEqual(len(self.data), len(self.phash))
         self.assertEqual(len(self.data), self.count)
+
+
+class MultipleTest(unittest.TestCase):
+    counts_small = [1, 2, 3, 4, 5]
+    counts_big = [7, 10, 20, 50, 100, 200, 500, 1000]
+
+    def test_equal(self):
+        for count in self.counts_big:
+            data = DataSource.get_random(count)
+            phash = PerfectHash(data)
+            self.assertEqual(len(data), len(phash))
+            for key, val in data.iteritems():
+                self.assertEqual(val, phash[key])
+
+    def test_brute(self):
+        for i in xrange(100):
+            for count in self.counts_small:
+                data = DataSource.get_random(count)
+                phash = PerfectHash(data)
+                self.assertEqual(len(data), len(phash))
+                for key, val in data.iteritems():
+                    self.assertEqual(val, phash[key])
 
 
 class SmallTest(unittest.TestCase):

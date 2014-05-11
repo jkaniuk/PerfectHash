@@ -35,7 +35,7 @@ class PerfectHash(object):
 
     def _create(self, data, tfactor=1.23, debug=False):
 
-        tsize = find_next_prime(tfactor * len(data))
+        tsize = find_next_prime(tfactor * len(data) + 1)
         gsize = find_next_prime(tsize / 5)
 
         # Marker for empty slot
