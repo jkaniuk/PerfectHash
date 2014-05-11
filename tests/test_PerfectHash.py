@@ -1,5 +1,6 @@
 import unittest
 import random
+import sys
 
 from PerfectHash import PerfectHash
 
@@ -40,6 +41,10 @@ class BigTest(unittest.TestCase):
         self.assertEqual(len(self.data), len(self.phash))
         self.assertEqual(len(self.data), self.count)
 
+    def test_size(self):
+        phash_size = self.phash.t.nbytes + self.phash.g.nbytes
+        self.assertGreater(sys.getsizeof(self.data), 3 * phash_size)
+
 
 class MultipleTest(unittest.TestCase):
     counts_small = [1, 2, 3, 4, 5]
@@ -52,6 +57,8 @@ class MultipleTest(unittest.TestCase):
             self.assertEqual(len(data), len(phash))
             for key, val in data.iteritems():
                 self.assertEqual(val, phash[key])
+            phash_size = phash.t.nbytes + phash.g.nbytes
+            self.assertGreater(sys.getsizeof(data), 3 * phash_size)
 
     def test_brute(self):
         for i in xrange(100):
