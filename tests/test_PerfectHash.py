@@ -42,8 +42,10 @@ class BigTest(unittest.TestCase):
         self.assertEqual(len(self.data), self.count)
 
     def test_memory(self):
-        phash_size = self.phash.t.nbytes + self.phash.g.nbytes
-        self.assertGreater(sys.getsizeof(self.data), 3 * phash_size)
+        print sys.getsizeof(self.data)
+        self.assertGreater(sys.getsizeof(self.data),
+                           sys.getsizeof(self.phash) * 3)
+        self.assertGreater(sys.getsizeof(self.data), 512)
 
 
 class MultipleTest(unittest.TestCase):
@@ -61,11 +63,10 @@ class MultipleTest(unittest.TestCase):
                 self.assertEqual(val, self.phashes[count][key])
 
     def test_memory(self):
-        for count in self.counts:
-            phash = self.phashes[count]
-            data = self.data[count]
-            phash_size = phash.t.nbytes + phash.g.nbytes
-            self.assertGreater(sys.getsizeof(data), 3 * phash_size)
+        for count in self.counts[4:]:
+            self.assertGreater(sys.getsizeof(self.data[count]),
+                               sys.getsizeof(self.phashes[count]) * 3)
+            self.assertGreater(sys.getsizeof(self.data[count]), 512)
 
 
 class BruteTest(unittest.TestCase):

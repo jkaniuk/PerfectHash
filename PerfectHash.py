@@ -1,4 +1,4 @@
-import numpy as np
+import sys
 
 
 def find_next_prime(x):
@@ -102,16 +102,15 @@ class PerfectHash(object):
                 # Update g table
                 g[self._hash(keys[0]) % gsize] = slot
 
-            # Break when single item starts
+            # Break when single items starts
             else:
                 break
 
-        # Pack tables
-        self.g = np.array(g)
         for idx, val in enumerate(t):
             if val == empty_marker:
                 t[idx] = False
-        self.t = np.array(t)
+        self.t = t
+        self.g = g
 
     def __getitem__(self, key):
         d = self.g[self._hash(key) % len(self.g)]
@@ -122,3 +121,9 @@ class PerfectHash(object):
 
     def __len__(self):
         return self.size
+
+    def __sizeof__(self):
+        size = sys.getsizeof({})
+        for item in self.__dict__.itervalues():
+            size += sys.getsizeof(item)
+        return size
